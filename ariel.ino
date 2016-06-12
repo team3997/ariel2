@@ -1,30 +1,11 @@
-//. Motor driver shield- 2012 Copyright (c) Seeed Technology Inc.
-// 
-//  Original Author: Jimbo.we
-//  Contribution: LG
-//  
-//  This library is free software; you can redistribute it and/or
-//  modify it under the terms of the GNU Lesser General Public
-//  License as published by the Free Software Foundation; either
-//  version 2.1 of the License, or (at your option) any later version.
-//
-//  This library is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//  Lesser General Public License for more details.
-//
-//  You should have received a copy of the GNU Lesser General Public
-//  License along with this       
-//  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
 int pinI1=8;//define I1 interface
 int pinI2=11;//define I2 interface 
 int speedpinA=9;//enable motor A
 int pinI3=12;//define I3 interface 
 int pinI4=13;//define I4 interface 
 int speedpinB=10;//enable motor B
-int spead =60;//define the spead of motor
-int incomingByte = 0; //for incoming serial data
+int spead =127;//define the spead of motor
+int incomingByte=0;
  
 void setup()
 {
@@ -83,28 +64,23 @@ void stop()//
 
 void loop()
 {
-  if (Serial.available() > 0) {
+  incomingByte = Serial.read();
+  if(incomingByte!=-1){
     
-    incomingByte = Serial.read();
+    if(incomingByte==108)// If the ASCII value of the received character equals "l"
+      forward(); //This does not correspond with the character and joystick ON PURPOSE
     
-    if(incomingByte==108)
-      left();
+    else if(incomingByte==114) //If the ASCII value of the received character and equals "r" 
+      backward(); //This does not correspond with the character and joystick ON PURPOSE
     
-    else if(incomingByte==114)
-      right();
+    else if(incomingByte==102) //If the ASCII value of the received character and equals "f" 
+      left(); //This does not correspond with the character and joystick ON PURPOSE
     
-    else if(incomingByte==102)
-      forward();
+    else if(incomingByte==98)// If the ASCII value of the received character equals "b" 
+      right(); //This does not correspond with the character and joystick ON PURPOSE
     
-    else if(incomingByte==98)
-      backward();
-    
-    else if(incomingByte==115)
-      stop();
-    
-    else
-      Serial.println("Invalid Input");
-    
-    
-  }    
+    else if(incomingByte==115) //If the ASCII value of the received character equals "s"
+      stop(); //This does not correspond with the character and joystick ON PURPOSE
 }
+}
+
